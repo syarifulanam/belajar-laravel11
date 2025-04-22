@@ -8,6 +8,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/blog', [BlogController::class, 'index']);
+
 // Route::get('/blog', function () {
 //     //ambil dari database
 //     $profile = 'aku programmer noob';
@@ -24,11 +26,10 @@ Route::get('/', function () {
 //cara kedua
 // route::view('/blog', 'blog',['data] => 'Saya Programmer pemula');
 
-Route::get('/blog', [BlogController::class, 'index']);
 
-Route::get('/blog/{id}', function (Request $request) {
-    // anggap aja melakukan update data & berhasil
-    return redirect()->route('blog');
+// Route::get('/blog/{id}', function (Request $request) {
+//     // anggap aja melakukan update data & berhasil
+//     return redirect()->route('blog');
 
-    // return 'ini adalah blog' . $request->id;
-});
+//     // return 'ini adalah blog' . $request->id;
+// });
