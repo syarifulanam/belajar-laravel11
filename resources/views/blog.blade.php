@@ -43,7 +43,7 @@
                     <tr>
                         <td>{{ ($blogs->currentpage()-1) * $blogs->perpage() + $loop->index + 1}}</td>
                         <td>{{ $blog->title }}</td>
-                        <td><a href="{{ url('blog/'.$blog->id.'/detail')}}">View</a> | Edit | Delete</td>
+                        <td><a href="{{ url('blog/'.$blog->id.'/detail')}}">View</a> | <a href="{{ url('blog/'.$blog->id.'/edit')}}">Edit</a> | <a href="{{ url('blog/'.$blog->id.'/delete')}}">Delete</a></td>
                     </tr>
                     @endforeach
                 </tbody>
