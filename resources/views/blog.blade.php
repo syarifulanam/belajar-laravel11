@@ -13,6 +13,12 @@
             <h1 class="text-center">Blog List</h1>
             
         <div class="mt-5 table-responsive">
+            <a href="{{ url('blog/add')}}" class="mb-3 btn btn-primary">Add New</a>
+            
+            @if(Session::has('message'))
+            <p class="alert alert-success">{{ Session::get('message') }}</p>              
+        @endif
+            
         <form method="GET">
             <div class="mb-3 input-group">
                 <input type="text" name="title" value="{{ $title }}" class="form-control" placeholder="Search Title" aria-label="Search Title" aria-describedby="button-addon2">
@@ -22,7 +28,7 @@
         
             <table class="table table-striped table-hover">
                 <thead>
-                    <th>#</th>
+                    <th>#</th> 
                     <th>Title</th>
                     <th>Action</th>
                 </thead>
