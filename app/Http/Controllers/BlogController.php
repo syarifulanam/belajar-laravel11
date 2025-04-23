@@ -38,4 +38,10 @@ class BlogController extends Controller
 
         return redirect()->route('blog');
     }
+
+    function show($id)
+    {
+        $blog = DB::table('blogs')->where('id', $id)->first();
+        return view('blog-detail', ['blog' => $blog]);
+    }
 }

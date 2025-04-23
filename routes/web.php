@@ -11,6 +11,7 @@ Route::get('/', function () {
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 Route::get('/blog/add', [BlogController::class, 'add']);
 Route::post('/blog/create', [BlogController::class, 'create']);
+Route::get('/blog/{id}/detail', [BlogController::class, 'show']);
 
 // Route::get('/blog', function () {
 //     //ambil dari database
