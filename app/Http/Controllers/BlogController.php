@@ -52,7 +52,7 @@ class BlogController extends Controller
         // $blog = DB::table('blogs')->where('id', $id)->first(); // cara pertama
         // $blog = Blog::find($id)->first();  // cara kedua
 
-        $blog = Blog::findOrFail($id); // Cara ke 3
+        $blog = Blog::with('comments')->findOrFail($id); // Cara ke 3
         // if (!$blog) {
         //     abort(404);
         // } //klo sudah pakai findOrFail tidak usah gunakan abort(404) lagi

@@ -22,6 +22,39 @@
                 </div>
             </div>
         </div>
+        
+        <div class="mt-5">
+            @if($errors->any())
+                <div class="alert alert-danger col-md-6 form-control">
+                    <ul>
+                       @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                       @endforeach 
+                    </ul>
+                </div>
+            @endif
+            
+            @if(Session::has('message'))
+        <p class="alert alert-success">{{ Session::get('message') }}</p>              
+    @endif
+    
+        <h5>Comments :</h5>
+        <form action="{{ url('comment/' . $blog->id) }}" method="POST">
+            @csrf         
+            <textarea class="form-control" name="comment_text" style="resize:none" rows="5"></textarea>
+            <button class="mt-3 btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+    
+    <hr class="mt-5">
+    
+    <div class="mt-5">
+        {{ ($blog->comments->count() == 0 ? 'no comments yet' : '')}}
+        
+        @foreach($blog->comments as $comment)
+            <div class="p-3 mb-3" style="background-color:rgb(187, 187, 187)"> {{ $comment->comment_text}} </div>
+        @endforeach
+    </div>
     </div>
 </body>
 </html>
