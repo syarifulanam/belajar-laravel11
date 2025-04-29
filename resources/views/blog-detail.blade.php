@@ -16,6 +16,13 @@
                 <p>
                     {{ $blog->description}}
                 </p>
+                    
+                <div>
+                    tags : @if($blog->tags->count() < 1) - @endif
+                    @foreach($blog->tags as $tag)
+                        <span class="p-2 text-white rounded bg-secondary me-1">{{ $tag->name}}</span>
+                    @endforeach
+                </div>
                 <div class="flex d-flex-column align-items-end">
                     <div>{{ $blog->created_at}}</div>
                     <div>by admin</div>
