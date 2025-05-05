@@ -19,6 +19,7 @@
                     <th>#</th> 
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Photo</th>
                     <th>Phone</th>
                 </thead>
                 <tbody class="table-group-divider">
@@ -33,6 +34,7 @@
                         <td>{{ $loop ->index + 1}}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
+                        <td>{{ $user->image ? $user->image->name : '-'}}</td>
                         <td>{{ $user->phone ? $user->phone->phone_number : '-'}}</td> 
                         {{-- <td>[[ $user->phone->phone_number ?? '-']]</td> --}}
                     </tr>

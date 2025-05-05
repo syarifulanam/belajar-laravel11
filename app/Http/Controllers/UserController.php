@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     function index()
     {
-        $users = User::with('phone')->get();
+        $users = User::with('phone', 'image')->get();
         return view('users', ['users' => $users]);
     }
 }

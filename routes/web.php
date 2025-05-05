@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ImageController;
+use App\Models\Image;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,6 +31,7 @@ Route::get('/phones', function () {
 
 Route::get('/comment', [CommentController::class, 'index']);
 Route::post('/comment/{blog_id}', [CommentController::class, 'store']);
+Route::get('/images', [ImageController::class, 'index']);
 // Route::get('/blog', function () {
 //     //ambil dari database
 //     $profile = 'aku programmer noob';
