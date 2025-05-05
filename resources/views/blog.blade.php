@@ -30,6 +30,8 @@
                 <thead>
                     <th>#</th> 
                     <th>Title</th>
+                    <th>Tags</th>
+                    <th>Comments</th>
                     <th>Action</th>
                 </thead>
                 <tbody class="table-group-divider">
@@ -41,8 +43,19 @@
                     
                     @foreach ($blogs as $blog)
                     <tr>
-                        <td>{{ ($blogs->currentpage()-1) * $blogs->perpage() + $loop->index + 1}}</td>
+                        {{-- <td>{{ ($blogs->currentpage()-1) * $blogs->perpage() + $loop->index + 1}}</td> --}}
+                        <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $blog->title }}</td>
+                        <td>
+                            @foreach( $blog->tags as $tag)
+                            <div>{{ $tag->name }}</div>
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach($blog->comments as $comment)
+                                <div>{{ $comment->comment_text }}</div>
+                            @endforeach
+                        </td>
                         <td><a href="{{ url('blog/'.$blog->id.'/detail')}}">View</a> | <a href="{{ url('blog/'.$blog->id.'/edit')}}">Edit</a> | <a href="{{ url('blog/'.$blog->id.'/delete')}}">Delete</a></td>
                     </tr>
                     @endforeach
@@ -50,7 +63,7 @@
             </table>
         </div>
         
-        {{ $blogs->links()}}
+        {{-- {{ $blogs->links()}} --}}
         
         </div>
 
