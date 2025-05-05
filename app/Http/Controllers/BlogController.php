@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 // use Illuminate\Contracts\Session\Session;
 
+use App\Models\Tag;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,8 @@ class BlogController extends Controller
 
     function add()
     {
-        return view('blog-add');
+        $tags = Tag::all();
+        return view('blog-add', ['tags' => $tags]);
     }
 
     function create(Request $request)
@@ -39,8 +41,17 @@ class BlogController extends Controller
         //     'title' => $request->title,
         //     'description' => $request->description
         // ]); //cara pertama
+        // $blog = Blog::create([
+        //     'title' => $request->title,
+        //     'description' => $request->description,
+        // ]);
 
-        Blog::create($request->all());
+        // if ($request->has('tags')) {
+        //     $blog->tags()->attach($request->tags);
+        // }
+
+        $blog = Blog::create($request->all()); // simpan data blog
+        $blog->tags()->attach($request->tags); // update untuk simpan data TAGS pada blog tersebut
 
         Session::flash('message', 'New Blog Successfully Added!');
 
@@ -52,7 +63,7 @@ class BlogController extends Controller
         // $blog = DB::table('blogs')->where('id', $id)->first(); // cara pertama
         // $blog = Blog::find($id)->first();  // cara kedua
 
-        $blog = Blog::with(['comments'])->findOrFail($id); // Cara ke 3
+        $blog = Blog::with(['comments', 'tags'])->findOrFail($id); // Cara ke 3
         // if (!$blog) {
         //     abort(404);
         // } //klo sudah pakai findOrFail tidak usah gunakan abort(404) lagi
@@ -65,8 +76,9 @@ class BlogController extends Controller
         // if (!$blog) {
         //     abort(404);
         // }
-        $blog = Blog::findOrFail($id); //cara kedua
-        return view('blog-edit', ['blog' => $blog]);
+        $tags = Tag::all();
+        $blog = Blog::with(['comments'])->findOrFail($id); //cara kedua
+        return view('blog-edit', ['blog' => $blog, 'tags' => $tags]);
     }
 
     function update(Request $request, $id)
@@ -83,6 +95,7 @@ class BlogController extends Controller
         // ]); //Cara pertama
 
         $blog = Blog::findOrFail($id);
+        $blog->tags()->sync($request->tags);
         $blog->update($request->all()); //Cara kedua
 
         Session::flash('message', 'Blog Successfully Updated!');

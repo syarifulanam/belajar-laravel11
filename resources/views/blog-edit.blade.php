@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Edit Blog</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
 <body>
@@ -13,7 +13,7 @@
             <h2 class="mt-5">Edit Blog : {{ $blog->title}}</h2>
 
             @if($errors->any())
-            <div class="alert alert-danger col md-6">
+            <div class="alert alert-danger col-md-6">
                 <ul>
                    @foreach($errors->all() as $error)
                     <li>{{ $error}}</li>
@@ -31,10 +31,29 @@
                 </div>
                 <div class="mt-3 col-md-6">
                     <label for="description" class="form-label">Description :</label>
-                    <textarea class="form-control" name="description" id="desc-textarea" rows="5">
-                        {{ $blog->description}}
+                    <textarea class="form-control" name="description" id="desc-textarea" rows="5">{{ $blog->description }}
                     </textarea>
                 </div>
+                
+                    <div class="mt-3">
+                        tags : @if($blog->tags->count() < 1) - @endif
+                        @foreach($blog->tags as $tag)
+                            <span class="p-2 text-white rounded bg-secondary me-1">{{ $tag->name}}</span>
+                        @endforeach
+                    </div>
+                    
+                    <div class="mt-3 col-md-6">
+                        <label class="form-label">Tags :</label>
+                        @foreach($tags as $key => $tag)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="tags[]" id="tag{{ $key }}" value="{{ $tag->id }}">
+                            <label class="form-check-label" for="tag{{ $key }}">
+                                {{ $tag->name }}
+                            </label>
+                        </div>
+                        @endforeach
+                    </div>
+                
                 <div class="mt-3 col-md-6">
                     <button class="btn btn-success form-control">Save</button>
                 </div>

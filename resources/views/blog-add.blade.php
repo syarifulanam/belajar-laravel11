@@ -21,7 +21,7 @@
             <h2 class="mb-5">Add New Blog Data</h2>
             
             @if($errors->any())
-            <div class="alert alert-danger col md-6">
+                <div class="alert alert-danger col-md-6">
                 <ul>
                    @foreach($errors->all() as $error)
                     <li>{{ $error}}</li>
@@ -29,8 +29,8 @@
                 </ul>
             </div>
             @endif
-            
-            <form action="{{ url('blog/create')}}" method="POST">
+                        
+            <form action="{{ url('blog/create') }}" method="POST">
                 @csrf
                 <div class="col-md-6">
                     <label for="title" class="form-label">Title :</label>
@@ -38,9 +38,18 @@
                 </div>
                 <div class="mt-3 col-md-6">
                     <label for="description" class="form-label">Description :</label>
-                    <textarea class="form-control" name="description" id="desc-textarea" rows="5">
-                        {{ old('description')}}
-                    </textarea>
+                    <textarea class="form-control" name="description" id="desc-textarea" rows="5">{{ old('description')}}</textarea>
+                </div>
+                <div class="mt-3 col-md-6">
+                    <label class="form-label">Tags :</label>
+                    @foreach($tags as $key => $tag)
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tags[]" id="tag{{ $key }}" value="{{ $tag->id }}">
+                        <label class="form-check-label" for="tag{{ $key }}">
+                            {{ $tag->name }}
+                        </label>
+                    </div>
+                    @endforeach
                 </div>
                 <div class="mt-3 col-md-6">
                     <button class="btn btn-success form-control">Save</button>
