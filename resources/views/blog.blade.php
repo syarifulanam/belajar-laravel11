@@ -32,6 +32,7 @@
                     <th>Title</th>
                     <th>image</th>
                     <th>Tags</th>
+                    <th>Rating</th>
                     <th>Comments</th>
                     <th>Action</th>
                 </thead>
@@ -51,6 +52,14 @@
                             @foreach( $blog->tags as $tag)
                             <div>{{ $tag->name }}</div>
                             @endforeach
+                        </td>
+                        <td>
+                            @if($blog->ratings->count() < 1)
+                                not rated yet
+                            @else{{
+                                collect($blog->ratings->pluck('rating_value'))->avg() //cara memunculkan rating
+                                 }}
+                            @endif
                         </td>
                         <td>
                             @foreach($blog->comments as $comment)
