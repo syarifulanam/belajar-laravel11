@@ -32,6 +32,7 @@
                     <th>Title</th>
                     <th>image</th>
                     <th>Tags</th>
+                    <th>Categories</th>
                     <th>Rating</th>
                     <th>Comments</th>
                     <th>Action</th>
@@ -54,11 +55,19 @@
                             @endforeach
                         </td>
                         <td>
+                            @if($blog->Categories->count() < 1)
+                                -
+                            @else
+                                @foreach ($blog->Categories as $category)
+                                    <div>{{ $category->name }}</div>
+                                @endforeach    
+                            @endif
+                        </td>
+                        <td>
                             @if($blog->ratings->count() < 1)
                                 not rated yet
-                            @else{{
-                                collect($blog->ratings->pluck('rating_value'))->avg() //cara memunculkan rating
-                                 }}
+                            @else
+                                {{ collect($blog->ratings->pluck('rating_value'))->avg() }}
                             @endif
                         </td>
                         <td>

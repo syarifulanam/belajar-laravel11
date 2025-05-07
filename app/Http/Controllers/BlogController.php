@@ -20,7 +20,7 @@ class BlogController extends Controller
         // return view('blog', ['blogs' => $blogs, 'title' => $title]); //cara pertama
 
         $title = $request->title;
-        $blogs = Blog::with(['tags', 'comments', 'image', 'ratings'])->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'asc')->paginate(); //cara kedua
+        $blogs = Blog::with(['tags', 'comments', 'image', 'ratings', 'categories'])->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'asc')->paginate(); //cara kedua
         return view('blog', ['blogs' => $blogs, 'title' => $title]);
     }
 
