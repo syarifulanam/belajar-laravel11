@@ -25,7 +25,7 @@
                 </div>
                 <div class="flex d-flex-column align-items-end">
                     <div>{{ $blog->created_at}}</div>
-                    <div>by admin</div>
+                    <div> {{ $blog->author ? 'by '.$blog->author->name : 'by admin' }}</div>
                 </div>
             </div>
         </div>
