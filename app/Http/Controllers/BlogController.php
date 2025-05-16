@@ -19,6 +19,11 @@ class BlogController extends Controller
         // $blogs = DB::table('blogs')->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'desc')->paginate(10);
 
         // return view('blog', ['blogs' => $blogs, 'title' => $title]); //cara pertama
+        Gate::authorize('viewAny', Blog::class); // menggunakan Gate
+
+        // if ($request->user()->cannot('viewAny', Blog::class)) {
+        //     abort(403);
+        // }
 
         $title = $request->title;
         $blogs = Blog::with(['tags', 'comments', 'image', 'ratings', 'categories'])->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'asc')->paginate(); //cara kedua
@@ -71,7 +76,7 @@ class BlogController extends Controller
         return view('blog-detail', ['blog' => $blog]);
     }
 
-    function edit($id)
+    function edit(Request $request, $id)
     {
         // $blog = DB::table('blogs')->where('id', $id)->first(); //cara pertama
         // if (!$blog) {
@@ -80,17 +85,7 @@ class BlogController extends Controller
         $tags = Tag::all();
         $blog = Blog::with(['comments'])->findOrFail($id); //cara kedua
 
-        // if (! Gate::allows('update-blog', $blog)) {
-        //     abort(403);
-        // }
-
-        // Gate::authorize('update-blog', $blog);
-
-        $response = Gate::inspect('update-blog', $blog);
-        if (!$response->allowed()) {
-            abort(403, $response->message());
-        }
-
+        Gate::authorize('update', $blog);
 
         return view('blog-edit', ['blog' => $blog, 'tags' => $tags]);
     }
@@ -110,6 +105,11 @@ class BlogController extends Controller
         // ]); //Cara pertama
 
         $blog = Blog::findOrFail($id);
+
+        if ($request->user()->cannot('update', $blog)) {
+            abort(403);
+        }
+
         $blog->tags()->sync($request->tags);
         $blog->update($request->all()); //Cara kedua
 
