@@ -3,13 +3,14 @@
 use App\Models\Image;
 use App\Models\Phone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\CommentController;
-use App\Http\Middleware\EnsureTokenIsValid;
+// use App\Http\Middleware\EnsureTokenIsValid;
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,6 +45,46 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'authenticating']);
 });
+
+Route::get('upload', function () {
+    // Storage::disk('public')->put('example2.txt', 'Contents');
+    Storage::put('example2.txt', 'Contents'); // cara pertama
+});
+
+Route::get('/thefile', function () {
+    // return asset('storage/example2.txt'); //cara pertama
+    return Storage::url('example2.txt'); //cara kedua
+    // return Storage::get('example2.txt'); // cara ketiga
+    // return Storage::size('example2.txt'); // cara keempat
+    // return Storage::fileExists('example2.txt'); // cara kelima
+});
+
+Route::get('upload-image', function () {
+    return view('upload-image');
+});
+
+Route::post('/upload-image', function (Request $request) {
+    $file = $request->file('image');
+    $ext = Storage::mimeType($file);
+    return $ext;
+    //     $path = Storage::putFileAs('images', $request->file('image'), 'tesUpload');
+    // return $path;
+});
+
+// $path = $request->file('image')->store('images'); // cara pertama
+// $path = $request->file('image')->storeAs('images', 'my-image.jpg'); // cara kedua
+// $path = $request->file('image')->storeAs('images', time() . '.' . $request->file('image')->extension()); // cara ketiga
+
+// return $path;
+
+// return Storage::url($path); // cara pertama
+// return asset($path); // cara kedua
+
+
+// Image::create([
+//     'name' => $request->file('image')->getClientOriginalName(),
+//     'path' => $path,
+// ]);
 
 // Route::get('/blog', function () {
 //     //ambil dari database

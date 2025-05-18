@@ -14,9 +14,13 @@ class BlogPolicy
     public function viewAny(User $user): Response
     {
         // return $user->active == 1;
+        // return $user->active == 1
+        //     ? Response::allow()
+        //     : Response::deny('You must be active to see blog list');
+
         return $user->active == 1
             ? Response::allow()
-            : Response::deny('You must be active to see blog list');
+            : Response::deny('Akun login Anda tidak aktif. Hubungi admin untuk mengaktifkan akun Anda.');
     }
 
     /**
@@ -41,11 +45,11 @@ class BlogPolicy
     public function update(User $user, blog $blog): Response
     {
         // return $user->id == $blog->author_id;
-            return $user->id == $blog->author_id
+        return $user->id == $blog->author_id
             ? Response::allow()
             : Response::deny('You must be the author to edit this blog');
     }
-    
+
 
     /**
      * Determine whether the user can delete the model.

@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
@@ -19,7 +20,14 @@ class BlogController extends Controller
         // $blogs = DB::table('blogs')->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'desc')->paginate(10);
 
         // return view('blog', ['blogs' => $blogs, 'title' => $title]); //cara pertama
+        
+        // ini cara 1 gate policy
         Gate::authorize('viewAny', Blog::class); // menggunakan Gate
+
+        // ini cara 2 mirip gate policy
+        // if (Auth::user()->active == 0) {
+        //     abort(403, 'Akun login Anda tidak aktif. Hubungi admin untuk mengaktifkan akun Anda.');
+        // }
 
         // if ($request->user()->cannot('viewAny', Blog::class)) {
         //     abort(403);
