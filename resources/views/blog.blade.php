@@ -49,8 +49,11 @@
                     <tr>
                         <td>{{ ($blogs->currentpage()-1) * $blogs->perpage() + $loop->index + 1}}</td>
                         <td>{{ $blog->title }}</td>
-                        <td> {{ $blog->author ? $blog->author->name : '.'}} </td>
-                        <td>{{ $blog->image ? $blog->image->name : '-'}}</td>
+                        <td> 
+                            {{-- {{ $blog->author ? $blog->author->name : '.'}}  --}}
+                            {{ $blog->author->name ?? '-' }}
+                        </td>
+                        <td>{{ $blog->image ? $blog->image : '-'}}</td>
                         <td>
                             @foreach( $blog->tags as $tag)
                             <div>{{ $tag->name }}</div>

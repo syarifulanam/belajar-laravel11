@@ -13,10 +13,22 @@
         <div class="mt-5">
             <h2 class="text-center">{{ $blog->title}}</h2>
             <div class="body-blog">
+                {{-- @if($blog->image)
+                <div>
+                    <img src="{{ asset('storage/'.$blog->image) }}" alt="gambar blog" width="300">
+                </div>
+                @endif --}}
+                @if ($blog->image)
+                    <div>
+                        <img src="{{ asset('storage/images/'.$blog->image) }}" class="img-thumbnail" alt="gambar" width="200px">
+                        <br>
+                        <div><b>Test URL:</b> {{ asset('images/'.$blog->image) }}</div>
+                        <div><b>Test URL:</b> {{ asset('storage/images/'.$blog->image) }}</div>
+                    </div>
+                @endif
                 <p>
                     {{ $blog->description}}
                 </p>
-                    
                 <div>
                     tags : @if($blog->tags->count() < 1) - @endif
                     @foreach($blog->tags as $tag)

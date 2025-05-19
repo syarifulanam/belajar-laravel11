@@ -65,10 +65,11 @@ Route::get('upload-image', function () {
 
 Route::post('/upload-image', function (Request $request) {
     $file = $request->file('image');
-    $ext = Storage::mimeType($file);
-    return $ext;
-    //     $path = Storage::putFileAs('images', $request->file('image'), 'tesUpload');
-    // return $path;
+    $name = $file->hashName();
+    $ext = $file->extension();
+
+    $path = Storage::putFileAs('images', $request->file('image'), 'tesUpload.' . $ext);
+    return $path;
 });
 
 // $path = $request->file('image')->store('images'); // cara pertama

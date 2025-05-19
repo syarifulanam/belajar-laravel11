@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
@@ -20,7 +21,7 @@ class BlogController extends Controller
         // $blogs = DB::table('blogs')->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'desc')->paginate(10);
 
         // return view('blog', ['blogs' => $blogs, 'title' => $title]); //cara pertama
-        
+
         // ini cara 1 gate policy
         Gate::authorize('viewAny', Blog::class); // menggunakan Gate
 
@@ -34,7 +35,11 @@ class BlogController extends Controller
         // }
 
         $title = $request->title;
-        $blogs = Blog::with(['tags', 'comments', 'image', 'ratings', 'categories'])->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'asc')->paginate(); //cara kedua
+        //$blogs = Blog::with(['tags', 'comments', 'image', 'ratings', 'categories'])->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'asc')->paginate(); //cara kedua
+        $blogs = Blog::with(['tags', 'comments', 'image', 'ratings', 'categories'])->where('title', 'LIKE', '%' . $title . '%')->orderBy('id', 'desc')->paginate();
+        
+        
+        // return $blogs; // untuk tampilan json api
         return view('blog', ['blogs' => $blogs, 'title' => $title]);
     }
 
@@ -51,6 +56,28 @@ class BlogController extends Controller
             'description' => 'required',
         ]);
 
+        // HAPUS
+        // if ($request->file('image_file')) {
+        //     $file = $request->file('image_file');
+        //     $name = $file->hashName();
+
+        //     Storage::putFileAs('public/images', $file, $name);
+
+        //     $request['image'] = $name;
+        // }
+
+        if ($request->file('image_file')) {
+            $file = $request->file('image_file');
+            $name = $file->hashName();
+
+            // please change to public from local
+            // FILESYSTEM_DISK=public
+            Storage::putFileAs('images', $file, $name);
+
+            $request['image'] = $name;
+            // return "CORRECT" . " && " . $file . " && " . $name;
+        }
+
         // DB::table('blogs')->insert([
         //     'title' => $request->title,
         //     'description' => $request->description
@@ -63,6 +90,8 @@ class BlogController extends Controller
         // if ($request->has('tags')) {
         //     $blog->tags()->attach($request->tags);
         // }
+
+        $request['author_id'] = Auth::user()->id; // ambil id user yang login
 
         $blog = Blog::create($request->all()); // simpan data blog
         $blog->tags()->attach($request->tags); // update untuk simpan data TAGS pada blog tersebut

@@ -30,7 +30,7 @@
             </div>
             @endif
                         
-            <form action="{{ url('blog/create') }}" method="POST">
+            <form action="{{ url('blog/create') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="col-md-6">
                     <label for="title" class="form-label">Title :</label>
@@ -40,6 +40,12 @@
                     <label for="description" class="form-label">Description :</label>
                     <textarea class="form-control" name="description" id="desc-textarea" rows="5">{{ old('description')}}</textarea>
                 </div>
+
+                <div class="mt-3 col-md-6">
+                      <input type="file" class="form-control" name="image_file">
+                    <label for="image" class="form-label">Image :</label>
+                </div>
+                
                 <div class="mt-3 col-md-6">
                     <label class="form-label">Tags :</label>
                     @foreach($tags as $key => $tag)
