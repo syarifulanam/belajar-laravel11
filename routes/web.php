@@ -3,15 +3,16 @@
 use App\Models\Image;
 use App\Models\Phone;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Jobs\ProcessWelcomeMail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\CommentController;
-use App\Mail\WelcomeMail;
-use Illuminate\Support\Facades\Mail;
+
+
 
 // use App\Http\Middleware\EnsureTokenIsValid;
 
@@ -76,12 +77,22 @@ Route::post('/upload-image', function (Request $request) {
 });
 
 Route::get('/send-welcome-mail', function () {
-    $data = [
-        'email' => 'contoh@gmail.com',
-        'password' => '123'
+    $users = [
+        ['email' => 'john@email.com', 'password' => '123'],
+        ['email' => 'johe@email.com', 'password' => '123'],
+        ['email' => 'johdor@email.com', 'password' => '123'],
+        ['email' => 'johs@email.com', 'password' => '123'],
+        ['email' => 'johb@email.com', 'password' => '123'],
+        ['email' => 'johm@email.com', 'password' => '123'],
+        ['email' => 'johi@email.com', 'password' => '123'],
+        ['email' => 'joho@email.com', 'password' => '123'],
+        ['email' => 'johe@email.com', 'password' => '123'],
+        ['email' => 'jo@email.com', 'password' => '123'],
     ];
 
-    Mail::to('anam@gmail.com')->send(new WelcomeMail($data));
+    foreach ($users as $user) {
+        ProcessWelcomeMail::dispatch($user)->onQueue('kirim-email');
+    }
 });
 // $path = $request->file('image')->store('images'); // cara pertama
 // $path = $request->file('image')->storeAs('images', 'my-image.jpg'); // cara kedua

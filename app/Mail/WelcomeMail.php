@@ -73,7 +73,7 @@ class WelcomeMail extends Mailable
         //         ->as('test-email-1.jpg')
         //         ->withMime('image/jpeg'),
         // ];
-
+ 
         // return [
         //     Attachment::fromPath(Storage::url('images/test-email.jpg'))
         //         ->as('test-email-2.jpg')
