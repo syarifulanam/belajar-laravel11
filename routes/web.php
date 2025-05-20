@@ -10,6 +10,9 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\CommentController;
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
+
 // use App\Http\Middleware\EnsureTokenIsValid;
 
 Route::get('/', function () {
@@ -72,6 +75,14 @@ Route::post('/upload-image', function (Request $request) {
     return $path;
 });
 
+Route::get('/send-welcome-mail', function () {
+    $data = [
+        'email' => 'contoh@gmail.com',
+        'password' => '123'
+    ];
+
+    Mail::to('anam@gmail.com')->send(new WelcomeMail($data));
+});
 // $path = $request->file('image')->store('images'); // cara pertama
 // $path = $request->file('image')->storeAs('images', 'my-image.jpg'); // cara kedua
 // $path = $request->file('image')->storeAs('images', time() . '.' . $request->file('image')->extension()); // cara ketiga
