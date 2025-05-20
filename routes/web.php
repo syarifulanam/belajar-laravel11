@@ -11,6 +11,8 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\CommentController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Validation\Rules\Email;
 
 
 
@@ -20,7 +22,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware('auth')->group(function () {
+Route::get('/profile', function () {
+    return auth()->user()->name;
+})->middleware('verified');
+
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/blog', [BlogController::class, 'index'])->name('blog');
     Route::get('/blog/add', [BlogController::class, 'add']);
     Route::post('/blog/create', [BlogController::class, 'create']);
@@ -48,6 +54,27 @@ Route::middleware('auth')->group(function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'authenticating']);
+    Route::get('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'createuser']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->middleware('auth')->name('verification.notice');
+
+    Route::get('email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+
+
+        return redirect('/profile');
+    })->middleware(['auth', 'signed'])->name('verification.verify');
+
+    Route::post('email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('message', 'Verification link sent!');
+    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 });
 
 Route::get('upload', function () {
