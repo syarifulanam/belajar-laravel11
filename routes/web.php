@@ -18,7 +18,7 @@ use App\Http\Controllers\ImageController;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\CommentController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-
+use Illuminate\Support\Facades\Auth;
 
 
 // use App\Http\Middleware\EnsureTokenIsValid;
@@ -28,7 +28,9 @@ Route::get('/', function () {
 });
 
 Route::get('/profile', function () {
-    return auth()->user()->name;
+    // return auth()->user()->name;
+    // return auth()->user();
+    return Auth::user()->name;
 })->middleware('verified');
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -75,11 +77,11 @@ Route::middleware('guest')->group(function () {
         return $status === Password::RESET_LINK_SENT
             ? back()->with('status', __($status))
             : back()->withErrors(['email' => __($status)]);
-            })->name('password.email');
+    })->name('password.email');
 
     Route::get('/reset-password/{token}', function (string $token) {
         return view('auth.reset-password', ['token' => $token]);
-        })->name('password.reset');
+    })->name('password.reset');
 
     Route::post('/reset-password', function (Request $request) {
         $request->validate([
@@ -104,26 +106,26 @@ Route::middleware('guest')->group(function () {
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
             : back()->withErrors(['email' => __($status)]);
-        })->name('password.update');
+    })->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
-         })->middleware('auth')->name('verification.notice');
+    })->middleware('auth')->name('verification.notice');
 
     Route::get('email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
 
 
         return redirect('/profile');
-            })->middleware(['auth', 'signed'])->name('verification.verify');
+    })->middleware(['auth', 'signed'])->name('verification.verify');
 
     Route::post('email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
 
         return back()->with('message', 'Verification link sent!');
-            })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 });
 
 Route::get('upload', function () {
